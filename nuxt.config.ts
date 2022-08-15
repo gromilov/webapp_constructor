@@ -29,9 +29,7 @@ async function nuxtConfig() {
   console.log(bot_id, 'bot_id')
 
   return defineNuxtConfig({
-    analyze: {
-      analyzerMode: 'static'
-    },
+    rootDir: `BOTS/BOT_${bot_id}`,
     runtimeConfig: {
       public: {
         blocks,
