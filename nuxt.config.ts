@@ -1,6 +1,8 @@
 import { defineNuxtConfig } from 'nuxt'
 import { initializeApp } from 'firebase/app'
-import { copySync } from 'fs-extra'
+import { copySync, mkdirSync } from 'fs-extra'
+import path from 'path'
+
 import { 
   getFirestore,
   doc,
@@ -21,30 +23,33 @@ const firebaseApp = initializeApp(firebaseConfig)
 export const db = getFirestore(firebaseApp)
 
 async function nuxtConfig() {
- 
+  let rootDir
+  const srcDir = 'client/'
   const bot_id = process.env.BOT_ID
   const docRef = doc(db, 'webapp', bot_id)
   const docSnap = await getDoc(docRef)
   const { blocks, routes } = docSnap.data()
-  // const rootDir = `BOTS/BOT_${bot_id}`
 
-  // const srcDir = `client`;
-  // const destDir = rootDir;
+  console.log(`Получины даные бота: ${bot_id}`)
 
-                              
-  // copySync(srcDir, destDir, (err) => {
-  //   if (err) {
-  //     console.error(err);
-  //   } else {
-  //     console.log("success!");
-  //   }
-  // });
-
-  console.log(`Get data bot id: ${bot_id}`)
+  if (process.env.NODE_ENV === 'production') {
+    let rootDir = `BOTS/BOT_${bot_id}`
+    
+    try {
+      copySync(
+        path.resolve( __dirname, srcDir), 
+        path.resolve( __dirname, `${rootDir}/${srcDir}`), 
+        { overwrite: true }
+      )
+      console.log(`Папка /client/ скопирована!`)
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   return defineNuxtConfig({
-    // rootDir,
-    srcDir: 'client/',
+    rootDir,
+    srcDir: `${srcDir}/`,
     runtimeConfig: {
       public: {
         blocks,

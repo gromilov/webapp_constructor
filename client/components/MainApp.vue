@@ -20,7 +20,6 @@ useHead({
 
 <template>
   <div class="web-app">
-    <pre>{{routes}}</pre>
     <div class="web-app__blocks">
       <template v-for="block in blocks" :key="block.id">
           <component :is="block.component" :options="block.options" @updateBlock="updateBlock"/>
