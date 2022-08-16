@@ -1,5 +1,6 @@
 import { defineNuxtConfig } from 'nuxt'
 import { initializeApp } from 'firebase/app'
+import { copySync } from 'fs-extra'
 import { 
   getFirestore,
   doc,
@@ -25,17 +26,40 @@ async function nuxtConfig() {
   const docRef = doc(db, 'webapp', bot_id)
   const docSnap = await getDoc(docRef)
   const { blocks, routes } = docSnap.data()
+  // const rootDir = `BOTS/BOT_${bot_id}`
 
-  console.log(bot_id, 'bot_id')
+  // const srcDir = `client`;
+  // const destDir = rootDir;
+
+                              
+  // copySync(srcDir, destDir, (err) => {
+  //   if (err) {
+  //     console.error(err);
+  //   } else {
+  //     console.log("success!");
+  //   }
+  // });
+
+  console.log(`Get data bot id: ${bot_id}`)
 
   return defineNuxtConfig({
-    rootDir: `BOTS/BOT_${bot_id}`,
+    // rootDir,
+    srcDir: 'client/',
     runtimeConfig: {
       public: {
         blocks,
         bot_id,
         routes,
       }
+    },
+    components: {
+      dirs: [
+        {
+          path: '~/components/Blocks',
+          global: true
+        },
+        '~/components'
+      ]
     },
     router: {
       // https://router.vuejs.org/api/interfaces/routeroptions.html
