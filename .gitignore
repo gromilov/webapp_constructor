@@ -6,6 +6,6 @@ node_modules
 .output
 .env
 dist
-BOTS
+WEB_APPS
 
 .vercel

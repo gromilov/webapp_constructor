@@ -33,7 +33,7 @@ async function nuxtConfig() {
   console.log(`Получины даные бота: ${bot_id}`)
 
   if (process.env.NODE_ENV === 'production') {
-    let rootDir = `BOTS/BOT_${bot_id}`
+    let rootDir = `WEB_APPS/APP_${bot_id}`
     
     try {
       copySync(
