@@ -1,6 +1,6 @@
 import { defineNuxtConfig } from 'nuxt'
 import { initializeApp } from 'firebase/app'
-import { copySync, mkdirSync } from 'fs-extra'
+import { copySync } from 'fs-extra'
 import path from 'path'
 
 import { 
@@ -28,7 +28,7 @@ async function nuxtConfig() {
   const bot_id = process.env.BOT_ID
   const docRef = doc(db, 'webapp', bot_id)
   const docSnap = await getDoc(docRef)
-  const { blocks, routes } = docSnap.data()
+  const { routes } = docSnap.data()
 
   console.log(`Получины даные бота: ${bot_id}`)
 
@@ -52,7 +52,7 @@ async function nuxtConfig() {
     srcDir: `${srcDir}/`,
     runtimeConfig: {
       public: {
-        blocks,
+        blocks: [],
         bot_id,
         routes,
       }
@@ -72,7 +72,7 @@ async function nuxtConfig() {
     },
     nitro: {
       prerender: {
-        routes: routes.map(({route}) => route)
+        routes: Object.values(routes).map(({href}) => href)
       }
     }
   })
