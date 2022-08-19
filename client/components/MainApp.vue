@@ -1,8 +1,6 @@
 <script setup>
 const { bot_id, routes, firebaseConfig } = useRuntimeConfig().public
 const route = useRoute()
-const blocks = useState('blocks')
-const order = useState('order')
 
 let page_id
 let name
@@ -11,10 +9,6 @@ const { id: s_page_id, name: s_name } = Object.values(routes).find(
 )
 page_id = s_page_id
 name = s_name
-
-console.log('page_id', page_id)
-console.log('bot_id', bot_id)
-console.log(route.fullPath)
 
 let page = {
   blocks: {},
@@ -33,11 +27,11 @@ try {
   const webappRef = doc(db, 'webapp', bot_id)
   const pageRef = doc(webappRef, 'pages', page_id)
   const docSnap = await getDoc(pageRef)
-  page.blocks = docSnap.data()
+  page = docSnap.data()
 }
 
-blocks.value = page?.blocks
-order.value = page?.order
+const blocks = ref(page?.blocks)
+const order = ref(page?.order)
 
 function updateBlock({id, text}) {
   const block = blocks.find((block) => block.id == id)
@@ -61,19 +55,14 @@ import {
   doc,
   getDoc,
 } from 'firebase/firestore'
-export default {
-  
-}
 </script>
 
 <template>
   <div class="web-app">
-    <div class="web-app__blocks">
-      <NuxtLink href="/test">
-        Nuxt website
-      </NuxtLink>
+    <div class="web-app__blocks" v-if="order.length">
+      <pre>{{ order }}</pre>
       <template v-for="id in order" :key="id">
-          <component :is="blocks[id].component" :options="blocks[id].options" @updateBlock="updateBlock"/>
+        <component :is="blocks[id].component" :options="blocks[id].options" @updateBlock="updateBlock"/>
       </template>
     </div>
   </div>
