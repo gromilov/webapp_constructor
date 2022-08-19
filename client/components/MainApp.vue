@@ -1,20 +1,11 @@
 <script setup>
-const { bot_id, routes, firebaseConfig } = useRuntimeConfig().public
 const route = useRoute()
-
-let page_id
-let name
-const { id: s_page_id, name: s_name } = Object.values(routes).find(
+const { bot_id, routes, firebaseConfig } = useRuntimeConfig().public
+const { id: page_id, name } = Object.values(routes).find(
   ({ href }) => route.fullPath.split('#')[0] === href
 )
-page_id = s_page_id
-name = s_name
 
-let page = {
-  blocks: {},
-  order: []
-}
-
+let page
 try {
   page = await $fetch(
     `/api/page`, { method: 'POST', body: { page_id }}
@@ -60,7 +51,6 @@ import {
 <template>
   <div class="web-app">
     <div class="web-app__blocks" v-if="order.length">
-      <pre>{{ order }}</pre>
       <template v-for="id in order" :key="id">
         <component :is="blocks[id].component" :options="blocks[id].options" @updateBlock="updateBlock"/>
       </template>
