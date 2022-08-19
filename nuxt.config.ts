@@ -7,6 +7,7 @@ import {
   getFirestore,
   doc,
   getDoc,
+  collection,
 } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -20,18 +21,17 @@ const firebaseConfig = {
 }
 
 const firebaseApp = initializeApp(firebaseConfig)
-export const db = getFirestore(firebaseApp)
+const db = getFirestore(firebaseApp)
 
 async function nuxtConfig() {
-  let rootDir
   const srcDir = 'client/'
   const bot_id = process.env.BOT_ID
   const docRef = doc(db, 'webapp', bot_id)
   const docSnap = await getDoc(docRef)
   const { routes } = docSnap.data()
-
-  console.log(`Получины даные бота: ${bot_id}`)
-
+  let rootDir
+  let pages
+  
   if (process.env.NODE_ENV === 'production') {
     rootDir = `WEB_APPS/APP_${bot_id}`
     
@@ -52,9 +52,10 @@ async function nuxtConfig() {
     srcDir: `${srcDir}/`,
     runtimeConfig: {
       public: {
-        blocks: [],
+        pages,
         bot_id,
         routes,
+        firebaseConfig,
       }
     },
     components: {
@@ -67,7 +68,6 @@ async function nuxtConfig() {
       ]
     },
     router: {
-      // https://router.vuejs.org/api/interfaces/routeroptions.html
       options: {}
     },
     nitro: {

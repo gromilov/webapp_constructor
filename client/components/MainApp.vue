@@ -1,15 +1,39 @@
 <script setup>
-const blocks = useState('blocks')
-const bot_id = useState('bot_id')
-const routes = useState('routes')
+const { bot_id, routes, firebaseConfig } = useRuntimeConfig().public
+const route = useRoute()
+const { id: page_id, name } = Object.values(routes).find(
+  ({ href }) => route.fullPath === href
+)
+
+let page = {
+  blocks: {},
+  order: []
+}
+try {
+  page = await $fetch(
+    `/api/page`, { method: 'POST', body: { page_id }}
+  );
+  console.log('API On')
+} catch {
+  console.log('API Off')
+  const firebaseApp = initializeApp(firebaseConfig)
+  const db = getFirestore(firebaseApp)
+  const webappRef = doc(db, 'webapp', bot_id)
+  const pageRef = doc(webappRef, 'pages', page_id)
+  const docSnap = await getDoc(pageRef)
+  page.blocks = docSnap.data()
+}
+
+const blocks = useState('blocks', () => page?.blocks)
+const order = useState('order', () => page?.order)
 
 function updateBlock({id, text}) {
-  const block = blocks.value.find((block) => block.id == id)
+  const block = blocks.find((block) => block.id == id)
   block.options.text = text
 }
 
 useHead({
-  title: 'Telegram Web App',
+  title: name,
   script: [
     {
       src: 'https://telegram.org/js/telegram-web-app.js',
@@ -18,11 +42,23 @@ useHead({
 })
 </script>
 
+<script>
+import { initializeApp } from 'firebase/app'
+import { 
+  getFirestore,
+  doc,
+  getDoc,
+} from 'firebase/firestore'
+export default {
+  
+}
+</script>
+
 <template>
   <div class="web-app">
     <div class="web-app__blocks">
-      <template v-for="block in blocks" :key="block.id">
-          <component :is="block.component" :options="block.options" @updateBlock="updateBlock"/>
+      <template v-for="id in order" :key="id">
+          <component :is="blocks[id].component" :options="blocks[id].options" @updateBlock="updateBlock"/>
       </template>
     </div>
   </div>

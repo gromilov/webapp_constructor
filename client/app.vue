@@ -3,10 +3,7 @@
 </template>
 
 <script setup>
-const { blocks, bot_id, routes } = useRuntimeConfig().public
-useState('blocks', () => blocks )
-useState('bot_id', () => bot_id )
-useState('routes', () => routes )
+const { bot_id, routes } = useRuntimeConfig().public
 </script>
 
 <style lang="scss">
