@@ -1,14 +1,26 @@
 <script setup>
 const { bot_id, routes, firebaseConfig } = useRuntimeConfig().public
 const route = useRoute()
-const { id: page_id, name } = Object.values(routes).find(
-  ({ href }) => route.fullPath === href
+const blocks = useState('blocks')
+const order = useState('order')
+
+let page_id
+let name
+const { id: s_page_id, name: s_name } = Object.values(routes).find(
+  ({ href }) => route.fullPath.split('#')[0] === href
 )
+page_id = s_page_id
+name = s_name
+
+console.log('page_id', page_id)
+console.log('bot_id', bot_id)
+console.log(route.fullPath)
 
 let page = {
   blocks: {},
   order: []
 }
+
 try {
   page = await $fetch(
     `/api/page`, { method: 'POST', body: { page_id }}
@@ -24,8 +36,8 @@ try {
   page.blocks = docSnap.data()
 }
 
-const blocks = useState('blocks', () => page?.blocks)
-const order = useState('order', () => page?.order)
+blocks.value = page?.blocks
+order.value = page?.order
 
 function updateBlock({id, text}) {
   const block = blocks.find((block) => block.id == id)
@@ -57,6 +69,9 @@ export default {
 <template>
   <div class="web-app">
     <div class="web-app__blocks">
+      <NuxtLink href="/test">
+        Nuxt website
+      </NuxtLink>
       <template v-for="id in order" :key="id">
           <component :is="blocks[id].component" :options="blocks[id].options" @updateBlock="updateBlock"/>
       </template>

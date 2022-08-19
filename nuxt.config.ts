@@ -33,7 +33,7 @@ async function nuxtConfig() {
   let pages
   
   if (process.env.NODE_ENV === 'production') {
-    rootDir = `WEB_APPS/APP_${bot_id}`
+    rootDir = `WEB_APPS/INQOOB_APP_${bot_id}`
     
     try {
       copySync(

@@ -3,10 +3,34 @@
 </template>
 
 <script setup>
-const { bot_id, routes } = useRuntimeConfig().public
+
 </script>
 
 <style lang="scss">
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tg-theme-bg-color: #18222d;
+    --tg-theme-secondary-bg-color: #131415;
+    --tg-theme-hint-color: #b1c3d5;
+    --tg-theme-link-color: #62bcf9;
+    --tg-theme-text-color: #ffffff;
+    --tg-theme-button-color: #2ea6ff;
+    --tg-theme-button-text-color: #ffffff;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --tg-theme-button-color: #2481cc;
+    --tg-theme-button-text-color: #ffffff;
+    --tg-theme-link-color: #2481cc;
+    --tg-theme-secondary-bg-color: #efeff3;
+    --tg-theme-bg-color: #ffffff;
+    --tg-theme-hint-color: #999999;
+    --tg-theme-text-color: #000000;
+  }
+}
+
 body {
   margin: 0;
   padding: 0;

@@ -5,7 +5,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "deploy": "BOT_ID=3283 nuxt generate; cd WEB_APPS/APP_3283/dist; vercel --yes"
+    "deployinit": "BOT_ID=3283 nuxt generate; cd WEB_APPS/INQOOB_APP_3283/; vercel",
+    "deploy": "BOT_ID=3283 nuxt generate; cd WEB_APPS/INQOOB_APP_3283/; vercel --yes --prod"
   },
   "devDependencies": {
     "nuxt": "3.0.0-rc.6",
