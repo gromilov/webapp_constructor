@@ -10,9 +10,7 @@ try {
   page = await $fetch(
     `/api/page`, { method: 'POST', body: { page_id }}
   );
-  console.log('API On')
 } catch {
-  console.log('API Off')
   const firebaseApp = initializeApp(firebaseConfig)
   const db = getFirestore(firebaseApp)
   const webappRef = doc(db, 'webapp', bot_id)
