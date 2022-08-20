@@ -7,6 +7,8 @@ const { id: page_id, name } = Object.values(routes).find(
 
 const blocks = ref({})
 const order = ref([])
+const active_block = ref(null)
+
 try {
   data = await $fetch(
     `/api/page`, { method: 'POST', body: { page_id }}
@@ -37,6 +39,10 @@ function updateBlock({id, text}) {
   block.options.text = text
 }
 
+function setActiveBlock(id) {
+  window.$bus.dispatchEvent('activeBlock', id)
+}
+
 useHead({
   title: name,
   script: [
@@ -44,6 +50,13 @@ useHead({
       src: 'https://telegram.org/js/telegram-web-app.js',
     }
   ]
+})
+
+onMounted(async () => {
+  window.$bus.dispatchEvent('page_id', page_id)
+  window.$bus.on('activeBlock', id => {
+    active_block.value = id
+  })
 })
 </script>
 
@@ -60,9 +73,9 @@ import {
 <template>
   <div class="web-app">
     <div class="web-app__blocks" v-if="order.length">
-      <template v-for="id in order" :key="id">
+      <div v-for="id in order" :key="id" @click="setActiveBlock(id)" :class="['web-app__block',{ 'web-app__block--active': active_block === id}]">
         <component :is="blocks[id].component" :options="blocks[id].options" @updateBlock="updateBlock"/>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -76,6 +89,11 @@ import {
   padding: 16px;
   &__blocks {
     max-width: 600px;
+  }
+  &__block {
+    &--active {
+      outline: 2px solid var(--tg-theme-button-color);
+    }
   }
 }
 </style>
