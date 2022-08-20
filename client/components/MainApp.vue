@@ -5,22 +5,32 @@ const { id: page_id, name } = Object.values(routes).find(
   ({ href }) => route.fullPath.split('#')[0] === href
 )
 
-let page
+const blocks = ref({})
+const order = ref([])
 try {
-  page = await $fetch(
+  data = await $fetch(
     `/api/page`, { method: 'POST', body: { page_id }}
   );
+  blocks.value = data.blocks
+  order.value = data.order
 } catch {
   const firebaseApp = initializeApp(firebaseConfig)
   const db = getFirestore(firebaseApp)
   const webappRef = doc(db, 'webapp', bot_id)
   const pageRef = doc(webappRef, 'pages', page_id)
-  const docSnap = await getDoc(pageRef)
-  page = docSnap.data()
-}
+  // const docSnap = await getDoc(pageRef)
 
-const blocks = ref(page?.blocks)
-const order = ref(page?.order)
+  // if (docSnap.exists()) {
+    onSnapshot(
+      pageRef,
+      { includeMetadataChanges: false },
+      doc => {
+        blocks.value = doc.data().blocks
+        order.value = doc.data().order
+      }
+    )
+  // }
+}
 
 function updateBlock({id, text}) {
   const block = blocks.find((block) => block.id == id)
@@ -41,6 +51,7 @@ useHead({
 import { initializeApp } from 'firebase/app'
 import { 
   getFirestore,
+  onSnapshot,
   doc,
   getDoc,
 } from 'firebase/firestore'
