@@ -55,6 +55,10 @@ useHead({
 onMounted(async () => {
   window.$bus.dispatchEvent('page_id', page_id)
   window.$bus.on('activeBlock', id => {
+    document.getElementById(id).scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    })
     active_block.value = id
   })
 })
@@ -73,7 +77,7 @@ import {
 <template>
   <div class="web-app">
     <div class="web-app__blocks" v-if="order.length">
-      <div v-for="id in order" :key="id" @click="setActiveBlock(id)" :class="['web-app__block',{ 'web-app__block--active': active_block === id}]">
+      <div :id="id" v-for="id in order" :key="id" @click="setActiveBlock(id)" :class="['web-app__block',{ 'web-app__block--active': active_block === id}]">
         <component :is="blocks[id].component" :options="blocks[id].options" @updateBlock="updateBlock"/>
       </div>
     </div>

@@ -1,5 +1,8 @@
 <template>
-  <button v-show="show" class="bwa-button" v-html="options.text" @click.stop="handleClick"></button>
+  <div class="bwa-button__container" v-show="show" >
+    <NuxtLink v-if="options.isLink" :to="options.url" class="bwa-button" v-html="options.text" />
+    <button v-else class="bwa-button" v-html="options.text" @click.stop="handleClick" />
+  </div>
 </template>
 
 <script>
@@ -32,11 +35,16 @@ export default {
 
 <style lang="scss">
 .bwa-button {
+  &__container {
+    width: 100%;
+  }
+  display: block;
   width: 100%;
   margin: 16px 0;
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
+  text-align: center;
   background: var(--tg-theme-button-color);
   color: var(--tg-theme-button-text-color);
 }
