@@ -77,8 +77,8 @@ import {
 <template>
   <div class="web-app">
     <div class="web-app__blocks" v-if="order.length">
-      <div :id="id" v-for="id in order" :key="id" @click="setActiveBlock(id)" :class="['web-app__block',{ 'web-app__block--active': active_block === id}]">
-        <component :is="blocks[id].component" :options="blocks[id].options" @updateBlock="updateBlock"/>
+      <div :id="id" v-for="id in order" :key="id" @contextmenu.prevent="setActiveBlock(id)" :class="['web-app__block',{ 'web-app__block--active': active_block === id}]">
+        <component :blocks="blocks" :is="blocks[id].component" :options="blocks[id].options" @updateBlock="updateBlock"/>
       </div>
     </div>
   </div>
@@ -92,6 +92,7 @@ import {
   align-items: center;
   padding: 16px;
   &__blocks {
+    width: 100%;
     max-width: 600px;
   }
   &__block {
