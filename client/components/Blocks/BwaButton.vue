@@ -5,7 +5,13 @@
   </div>
 </template>
 
+<script setup>
+const page = usePage()
+
+</script>
+
 <script>
+import { usePage } from '@/stores'
 export default {
   name: 'BwaButton',
   props: {
@@ -20,11 +26,8 @@ export default {
     handleClick() {
       const tg = window.Telegram?.WebApp
       const ctx = this
-      const runCode = new Function('tg', 'ctx', this.options.code);
-      runCode(tg, ctx)
-    },
-    updateBlock({ id, text }) {
-      this.$emit('updateBlock', { id, text })
+      const runCode = new Function('tg', 'updateBlock', this.options.code);
+      runCode(tg, this.page.updateBlock)
     },
     hide() {
       this.show = false

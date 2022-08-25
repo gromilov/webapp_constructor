@@ -19,6 +19,9 @@ export const usePage = defineStore('page', {
     setPage(page) {
       this.$patch(page)
     },
+    updateBlock({id, fild = "text", value}) {
+      this.blocks[id].options[fild] = value
+    },
     setActiveBlock(block_id) {
       this.$patch({
         active_block: block_id
