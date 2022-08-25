@@ -9,10 +9,12 @@ const firebaseApp = initializeApp(firebaseConfig)
 const db = getFirestore(firebaseApp)
 
 export default defineEventHandler(async (event) => {
-  const { page_id } = await useBody(event)
-  const webappRef = doc(db, 'webapp', bot_id)
-  const pageRef = doc(webappRef, 'pages', page_id)
-  const pageSnap = await getDoc(pageRef)
-  const page = pageSnap.data()
-  return page
+  
+    const { page_id } = await useBody(event)
+    const webappRef = doc(db, 'webapp', bot_id)
+    const pageRef = doc(webappRef, 'pages', page_id)
+    const pageSnap = await getDoc(pageRef)
+    const page = pageSnap.data()
+    return page
+  
 })

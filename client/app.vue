@@ -2,9 +2,6 @@
   <NuxtPage />
 </template>
 
-<script setup>
-</script>
-
 <style lang="scss">
 @media (prefers-color-scheme: dark) {
   :root {

@@ -58,6 +58,10 @@ async function nuxtConfig() {
         firebaseConfig,
       }
     },
+    buildModules: [
+      // pinia plugin
+      '@pinia/nuxt',
+    ],
     components: {
       dirs: [
         {

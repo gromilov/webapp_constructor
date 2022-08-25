@@ -1,7 +1,7 @@
 <template>
   <div class="bwa-buttons">
     <BwaGrid :options="options" :block_id="block_id">
-      <BwaButton :options="blocks[id].options" v-for="id in childrens" :key="id" />
+      <Block v-for="id in options.childrens" :key="id" :block_id="id" />
     </BwaGrid>
   </div>
 </template>
@@ -11,13 +11,6 @@ export default {
   name: 'BwaButtons',
   props: {
     options: Object,
-    blocks: Object,
-  },
-  
-  computed: {
-    childrens() {
-      return this.options.childrens
-    },
   },
 }
 </script>
