@@ -7,6 +7,7 @@
     )
     page.setPageId(page_id)
     onMounted( () => {
+      if (process.client && process.env.PREVIEW === "preview") {
       bus.dispatchEvent('page_id', page_id)
       bus.on('activeBlock', block_id => {
         try {
@@ -19,15 +20,17 @@
         }
         page.setActiveBlock(block_id)
       })
+      }
     })
 
     onUnmounted(() => {
-      if (process.client) {
+      if (process.client && process.env.PREVIEW === "preview") {
         bus.off('activeBlock')
         bus.off('page_id')
         adapter.destroy()
       }
-    }) 
+    })
+  
     if (process.client) {
       const firebaseApp = initializeApp(firebaseConfig)
       const db = getFirestore(firebaseApp)
@@ -40,7 +43,9 @@
           page.setPage(doc.data())
         }
       )
-    } else if (process.env.NODE_ENV === 'production') {
+    }
+
+    if (process.server && process.env.PREVIEW !== "preview") {
       const firebaseApp = initializeApp(firebaseConfig)
       const db = getFirestore(firebaseApp)
       const webappRef = doc(db, 'webapp', bot_id)
@@ -50,7 +55,9 @@
     }
 
     function setActiveBlock(block_id) {
-      bus.dispatchEvent('activeBlock', block_id)
+      if (process.client && process.env.PREVIEW === "preview") {
+        bus.dispatchEvent('activeBlock', block_id)
+      }
     }
 
     useHead({

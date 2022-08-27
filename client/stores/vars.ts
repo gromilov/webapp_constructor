@@ -2,7 +2,9 @@ import { defineStore } from 'pinia'
 
 export const useVars = defineStore('vars', {
   state: () => ({
-    vars: { users: ['Max', 'Gromilov'] },
+    vars: {
+      
+    },
   }),
 
   getters: {

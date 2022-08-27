@@ -3,11 +3,11 @@
 </template>
 <script setup>
 const props = defineProps({ options: Object })
-const options = props.options
+
 const page = usePage()
 const vars = useVars()
-
-const variables = vars.vars
+const options = computed(() => props.options)
+const variables = computed(() => vars.vars)
 const getState = vars.getState
 const setState = vars.setState
 onMounted(() => {
@@ -15,9 +15,8 @@ onMounted(() => {
 }) 
 const runCode = async () => {
   const tg = window.Telegram?.WebApp
-  const runCode = new Function('el', 'tg', 'setState', 'getState', '$', options.code);
-  console.log(options, tg, setState, getState, variables)
-  await runCode(options, tg, setState, getState, variables )
+  const runCode = new Function('el', 'tg', 'setState', 'getState', '$', props.options.code);
+  await runCode(options, tg, setState, getState, variables.value)
 }
 
 </script>

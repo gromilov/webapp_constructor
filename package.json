@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "build": "BOT=3283 nuxt generate",
-    "dev": "nuxt dev",
+    "dev": "BOT_ID=3283 PREVIEW=preview nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "deployinit": "BOT_ID=3283 nuxt generate; cd WEB_APPS/INQOOB_APP_3283/; vercel",

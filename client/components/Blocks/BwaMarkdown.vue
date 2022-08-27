@@ -3,27 +3,23 @@
     <div class="bwa-markdown" v-html="html"></div>
   </client-only>
 </template>
+
 <script setup>
+const props = defineProps({ options: Object})
 const variables = useVars()
 const vars = computed(() => variables.vars)
+
+const html = computed(() => {
+  const template = Handlebars.compile(props.options.text);
+  const data = marked.parse(template(vars.value))
+  return data
+})
 </script>
+
 <script>
 import { marked } from 'marked'
 import Handlebars from 'handlebars'
 import { useVars } from '@/stores/vars'
-export default {
-  name: 'BwaMarkdown',
-  props: {
-    options: Object,
-  },
-  computed: {
-    html() {
-      const template = Handlebars.compile(this.options.text);
-      const data = marked.parse(template(this.vars), { sanitize: true })
-      return data
-    }
-  }
-}
 </script>
 
 <style lang="scss">
