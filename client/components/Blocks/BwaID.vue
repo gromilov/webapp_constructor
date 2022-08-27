@@ -1,10 +1,7 @@
 <template>
-  <div class="bwa-buttons">
-    <BwaGrid :options="options" :block_id="block_id">
-      <Block v-for="id in options.childrens" :key="id" :block_id="id" />
-    </BwaGrid>
-  </div>
+  <Block :block_id="options.ID" />
 </template>
+
 
 <script setup>
 const props = defineProps({ block_id: String, options: Object})

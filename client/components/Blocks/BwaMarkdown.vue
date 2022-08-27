@@ -1,9 +1,16 @@
 <template>
-  <div class="bwa-markdown" v-html="html"></div>
+  <client-only>
+    <div class="bwa-markdown" v-html="html"></div>
+  </client-only>
 </template>
-
+<script setup>
+const variables = useVars()
+const vars = computed(() => variables.vars)
+</script>
 <script>
 import { marked } from 'marked'
+import Handlebars from 'handlebars'
+import { useVars } from '@/stores/vars'
 export default {
   name: 'BwaMarkdown',
   props: {
@@ -11,7 +18,8 @@ export default {
   },
   computed: {
     html() {
-      const data = marked.parse(this.options.text, { sanitize: true })
+      const template = Handlebars.compile(this.options.text);
+      const data = marked.parse(template(this.vars), { sanitize: true })
       return data
     }
   }
@@ -50,6 +58,9 @@ export default {
   }
   img {
     max-width: 100%;
+  }
+  hr {
+    border: 1px solid var(--tg-theme-link)
   }
 }
 </style>

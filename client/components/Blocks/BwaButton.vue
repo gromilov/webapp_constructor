@@ -1,39 +1,54 @@
 <template>
-  <div class="bwa-button__container" v-show="show" >
+  <div class="bwa-button__container" >
     <NuxtLink v-if="options.isLink" :to="options.url" class="bwa-button" v-html="options.text" />
     <button v-else class="bwa-button" v-html="options.text" @click.stop="handleClick" />
   </div>
 </template>
 
 <script setup>
+const props = defineProps({ options: Object })
+const options = props.options
 const page = usePage()
+const vars = useVars()
 
+const variables = vars.vars
+const getState = vars.getState
+const setState = vars.setState
+
+const runCode = () => {
+  const tg = window.Telegram?.WebApp
+  const runCode = new Function('el', 'tg', 'setState', 'getState', '$', options.code);
+  runCode(options, tg, setState, getState, variables )
+}
+const handleClick = function () {
+  runCode()
+}
 </script>
 
 <script>
+import { useVars } from '@/stores/vars'
 import { usePage } from '@/stores'
-export default {
-  name: 'BwaButton',
-  props: {
-    options: Object,
-  },
-  data() {
-    return {
-      show: true,
-    }
-  },
-  methods: {
-    handleClick() {
-      const tg = window.Telegram?.WebApp
-      const ctx = this
-      const runCode = new Function('tg', 'updateBlock', this.options.code);
-      runCode(tg, this.page.updateBlock)
-    },
-    hide() {
-      this.show = false
-    }
-  },
-}
+// export default {
+//   name: 'BwaButton',
+//   props: {
+//     options: Object,
+//   },
+//   data() {
+//     return {
+//       show: true,
+//     }
+//   },
+//   methods: {
+//     handleClick() {
+//       const tg = window.Telegram?.WebApp
+//       const runCode = new Function('el', 'tg', 'updateBlock', 'setState', 'getState', '$', this.options.code);
+//       runCode(this.options, tg, this.page.updateBlock, this.vars.setState, this.vars.getState, this.vars.vars )
+//     },
+//     hide() {
+//       this.show = false
+//     }
+//   },
+// }
 </script>
 
 <style lang="scss">

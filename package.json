@@ -6,17 +6,18 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "deployinit": "BOT_ID=3283 nuxt generate; cd WEB_APPS/INQOOB_APP_3283/; vercel",
-    "deploy": "BOT_ID=3283 nuxt generate; cd WEB_APPS/INQOOB_APP_3283/; vercel --yes --prod"
+    "deploy": "BOT_ID=3283 nuxt generate;",
+    "dep": "cd WEB_APPS/INQOOB_APP_3283/; vercel --yes --prod"
   },
   "devDependencies": {
-    "nuxt": "3.0.0-rc.6",
+    "nuxt": "3.0.0-rc.8",
     "sass": "^1.54.4"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.1",
-    "@vueform/slider": "^2.1.2",
     "@waves/waves-browser-bus": "^0.2.7",
     "firebase": "^9.9.2",
+    "handlebars": "^4.7.7",
     "marked": "^4.0.19"
   }
 }
