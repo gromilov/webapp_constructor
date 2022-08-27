@@ -1,5 +1,4 @@
-<script setup> 
-
+<script setup>
     let page = usePage()
     const route = useRoute()
     const { bot_id, routes, firebaseConfig } = useRuntimeConfig().public
@@ -41,7 +40,7 @@
           page.setPage(doc.data())
         }
       )
-    } else {
+    } else if (process.env.NODE_ENV === 'production') {
       const firebaseApp = initializeApp(firebaseConfig)
       const db = getFirestore(firebaseApp)
       const webappRef = doc(db, 'webapp', bot_id)
@@ -49,6 +48,7 @@
       const pageSnap = await getDoc(pageRef)
       page.setPage(pageSnap.data()) 
     }
+
     function setActiveBlock(block_id) {
       bus.dispatchEvent('activeBlock', block_id)
     }
@@ -65,13 +65,9 @@
     const blocks = computed(() => page.blocks)
     const order = computed(() => page.order)
     const active_block = computed(() => page.active_block)
-    function cons(block_id) {
-      console.log(block_id, "=========")
-    }
-     
 </script>
 <script>
-// import { Bus, WindowAdapter } from '@waves/waves-browser-bus';
+import { Bus, WindowAdapter } from '@waves/waves-browser-bus';
 import { initializeApp } from 'firebase/app'
 import { 
   getFirestore,
