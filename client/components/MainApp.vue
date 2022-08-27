@@ -7,7 +7,7 @@
     )
     page.setPageId(page_id)
     onMounted( () => {
-      if (process.client && process.env.PREVIEW === "preview") {
+      if (process.client && process.env?.PREVIEW === "preview") {
       bus.dispatchEvent('page_id', page_id)
       bus.on('activeBlock', block_id => {
         try {
@@ -24,7 +24,7 @@
     })
 
     onUnmounted(() => {
-      if (process.client && process.env.PREVIEW === "preview") {
+      if (process.client && process.env?.PREVIEW === "preview") {
         bus.off('activeBlock')
         bus.off('page_id')
         adapter.destroy()
@@ -45,7 +45,7 @@
       )
     }
 
-    if (process.server && process.env.PREVIEW !== "preview") {
+    if (process.server && process.env?.PREVIEW !== "preview") {
       const firebaseApp = initializeApp(firebaseConfig)
       const db = getFirestore(firebaseApp)
       const webappRef = doc(db, 'webapp', bot_id)
@@ -55,7 +55,7 @@
     }
 
     function setActiveBlock(block_id) {
-      if (process.client && process.env.PREVIEW === "preview") {
+      if (process.client && process.env?.PREVIEW === "preview") {
         bus.dispatchEvent('activeBlock', block_id)
       }
     }
